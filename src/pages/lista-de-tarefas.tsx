@@ -42,7 +42,8 @@ export async function getServerSideProps() {
     const {
       data: { stages }
     } = await apolloClient.query({
-      query: GET_STAGES
+      query: GET_STAGES,
+      fetchPolicy: 'no-cache'
     })
 
     const columns = [] as TStage[]
@@ -54,7 +55,8 @@ export async function getServerSideProps() {
         query: GET_TASKS,
         variables: {
           stageId: id
-        }
+        },
+        fetchPolicy: 'no-cache'
       })
 
       await columns.push({
