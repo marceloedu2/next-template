@@ -1,7 +1,11 @@
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 
-import GlobalStyles from 'styles/global'
+import GlobalStyles from '@/styles/global'
+import { ThemeProvider } from 'styled-components'
+import theme from '@/styles/theme'
+import apolloClient from '@/configs/apolloApi'
+import { ApolloProvider } from '@apollo/client'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -16,8 +20,12 @@ const App = ({ Component, pageProps }: AppProps) => {
           content="A simple project starter to work with Typecript, React, NextJS and Styled Components"
         />
       </Head>
-      <GlobalStyles />
-      <Component {...pageProps} />
+      <ThemeProvider theme={theme}>
+        <ApolloProvider client={apolloClient}>
+          <GlobalStyles />
+          <Component {...pageProps} />
+        </ApolloProvider>
+      </ThemeProvider>
     </>
   )
 }

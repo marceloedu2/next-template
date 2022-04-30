@@ -1,11 +1,12 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/ban-types */
 import { Plugin, NewPlugin } from 'pretty-format'
 
 declare global {
   namespace jest {
-    interface AsymmetricMatcher {
+    interface asymmetricMatcher {
       $$typeof: symbol
-      sample?: string | RegExp | object | Array<any> | Function
+
+      sample?: string | RegExp | object | Array<never> | Function
     }
 
     type Value = string | number | RegExp | AsymmetricMatcher | undefined
@@ -16,10 +17,11 @@ declare global {
       supports?: string
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     interface Matchers<R, T> {
       toHaveStyleRule(property: string, value?: Value, options?: Options): R
     }
   }
 }
 
-export declare const styleSheetSerializer: Excluse<Plugin, NewPlugin>
+export declare const styleSheetSerializer: Exclude<Plugin, NewPlugin>

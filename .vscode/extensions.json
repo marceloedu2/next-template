@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "mike-co.import-sorter",
+    "esbenp.prettier-vscode",
+    "editorconfig.editorconfig",
+    "dbaeumer.vscode-eslint",
+    "christian-kohler.path-intellisense",
+    "bradlc.vscode-tailwindcss"
+  ]
+}
