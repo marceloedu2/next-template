@@ -11,12 +11,12 @@ const Card = ({
 }: TTask) => {
   return (
     <S.Container {...props}>
-      <S.HeaderContent color={priority.color}>
+      <S.HeaderContent color={priority?.color || '#D8D8D8'}>
         <p>
-          <b>{id}:</b> {user.username}
+          <b>{id}:</b> {user?.username}
         </p>
 
-        <p>{priority.name}</p>
+        <p>{priority?.name}</p>
       </S.HeaderContent>
       <S.BodyContent>
         <p>{description}</p>
@@ -24,12 +24,12 @@ const Card = ({
           src={`https://ui-avatars.com/api/?background=${priority.color.replace(
             '#',
             ''
-          )}&name=${user.username}`}
-          alt={user.username}
+          )}&name=${user?.username}`}
+          alt={user?.username}
         />
       </S.BodyContent>
       <S.FooterContent>
-        <b>Tipo:</b> <p>{task_type.name}</p>
+        <b>Tipo:</b> <p>{task_type?.name}</p>
       </S.FooterContent>
     </S.Container>
   )

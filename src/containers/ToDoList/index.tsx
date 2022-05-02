@@ -35,8 +35,6 @@ const ToDoList: React.FC = () => {
 
     const columns = await Promise.all(
       stages.map(async ({ id, name, color }: TStage) => {
-        console.log({ id, name, color })
-
         const {
           data: { tasks }
         } = await apolloClient.query({
