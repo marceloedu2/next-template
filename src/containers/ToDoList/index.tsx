@@ -11,17 +11,53 @@ import {
   DraggableStateSnapshot,
   resetServerContext
 } from 'react-beautiful-dnd'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import produce from 'immer'
 
-import { TStage } from '@/pages/lista-de-tarefas'
+import { TStage, TTask } from '@/pages/lista-de-tarefas'
+import { UPDATE_COLUMN_TASK } from '@/graphql/mutations/tasks'
+import { useApolloClient } from '@apollo/client'
+import { GET_STAGES } from '@/graphql/queries/stages'
+import { GET_TASKS } from '@/graphql/queries/tasks'
 
-const ToDoList: React.FC<{ columns: TStage[] }> = ({ columns }) => {
+const ToDoList: React.FC = () => {
+  const apolloClient = useApolloClient()
   resetServerContext()
 
-  const [listToDo, setListToDo] = useState<TStage[]>(columns)
+  const [listToDo, setListToDo] = useState<TStage[]>([] as TStage[])
 
-  const onDragEnd = (result: DropResult) => {
+  const handleToDo = async () => {
+    const {
+      data: { stages }
+    } = await apolloClient.query({
+      query: GET_STAGES
+    })
+
+    const columns = await Promise.all(
+      stages.map(async ({ id, name, color }: TStage) => {
+        console.log({ id, name, color })
+
+        const {
+          data: { tasks }
+        } = await apolloClient.query({
+          query: GET_TASKS,
+          variables: {
+            stageId: id
+          }
+        })
+        return {
+          id,
+          name,
+          color,
+          cards: tasks || []
+        }
+      })
+    )
+
+    setListToDo(columns)
+  }
+
+  const onDragEnd = async (result: DropResult) => {
     if (!result.destination) return
 
     const { source, destination } = result
@@ -45,8 +81,53 @@ const ToDoList: React.FC<{ columns: TStage[] }> = ({ columns }) => {
       draft[destinationColumnIndex].cards.splice(destination?.index, 0, dragged)
     })
 
-    setListToDo(newListToDo)
+    await setListToDo(newListToDo)
+
+    if (source.droppableId === destination.droppableId) {
+      await insetSource(newListToDo[sourceColumnIndex].cards as TTask[])
+    } else {
+      const sourceColumn = newListToDo[sourceColumnIndex].cards as TTask[]
+      const destinationColumn = newListToDo[destinationColumnIndex]
+        .cards as TTask[]
+
+      await insetSource(sourceColumn?.length > 0 ? sourceColumn : [])
+      await insetSource(destinationColumn?.length > 0 ? destinationColumn : [])
+    }
   }
+
+  const insetSource = (listCard: TTask[]) => {
+    console.log({ listCard })
+
+    listCard?.forEach(async (card, index) => {
+      console.log({
+        id: Number(card.id),
+        stage: Number(card.stage.id),
+        order: Number(index + 1)
+      })
+
+      const { errors } = await apolloClient.mutate({
+        mutation: UPDATE_COLUMN_TASK,
+        variables: {
+          id: Number(card.id),
+          stage: Number(card.columnId),
+          order: Number(index + 1)
+        }
+      })
+      if (errors) {
+        console.log('error')
+
+        // return addToast({
+        //   title: 'Erro de conexão.',
+        //   description: 'Verifique sua internet e tente novamente mais tarde!',
+        //   type: 'error'
+        // })
+      }
+    })
+  }
+
+  useEffect(() => {
+    handleToDo()
+  }, [])
 
   return (
     <S.Container>
