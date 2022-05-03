@@ -14,12 +14,12 @@ import {
 import { useEffect, useState } from 'react'
 import produce from 'immer'
 
-import { TStage, TTask } from '@/pages/lista-de-tarefas'
+import { TStage, TTask } from '@/pages/ocorrencias'
 import { UPDATE_COLUMN_TASK } from '@/graphql/mutations/tasks'
 import { useApolloClient } from '@apollo/client'
 import { GET_STAGES } from '@/graphql/queries/stages'
 import { GET_TASKS } from '@/graphql/queries/tasks'
-import Icon from '@/components/Icon'
+import { toast } from 'react-toastify'
 
 const ToDoList: React.FC = () => {
   const apolloClient = useApolloClient()
@@ -112,14 +112,13 @@ const ToDoList: React.FC = () => {
           order: Number(index + 1)
         }
       })
+
       if (errors) {
         console.log('error')
 
-        // return addToast({
-        //   title: 'Erro de conexão.',
-        //   description: 'Verifique sua internet e tente novamente mais tarde!',
-        //   type: 'error'
-        // })
+        return toast.error(
+          'Verifique sua internet e tente novamente mais tarde!'
+        )
       }
     })
   }
@@ -146,9 +145,6 @@ const ToDoList: React.FC = () => {
                   >
                     <S.Header bgColor={color}>
                       <div>
-                        <button type="button">
-                          <Icon name="plus-square" />
-                        </button>
                         <b>{name}</b>{' '}
                       </div>
                       <p>{cards?.length || 0}</p>

@@ -6,6 +6,8 @@ import { ThemeProvider } from 'styled-components'
 import theme from '@/styles/theme'
 import apolloClient from '@/configs/apolloApi'
 import { ApolloProvider } from '@apollo/client'
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -20,6 +22,7 @@ const App = ({ Component, pageProps }: AppProps) => {
       <ThemeProvider theme={theme}>
         <ApolloProvider client={apolloClient}>
           <GlobalStyles />
+          <ToastContainer />
           <Component {...pageProps} />
         </ApolloProvider>
       </ThemeProvider>

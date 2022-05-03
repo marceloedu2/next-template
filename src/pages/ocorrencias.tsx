@@ -31,7 +31,7 @@ export type TTask = {
   }
 }
 
-const ToDoList: React.FC = () => {
+const Occurrences: React.FC = () => {
   return (
     <LayoutDefault>
       <ToDoListContainer />
@@ -39,10 +39,4 @@ const ToDoList: React.FC = () => {
   )
 }
 
-export async function getServerSideProps() {
-  return {
-    props: { columns: [] }
-  }
-}
-
-export default ToDoList
+export default Occurrences
