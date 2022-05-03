@@ -15,14 +15,15 @@ export const Container = styled.div`
   `}
 `
 
-export const HeaderContent = styled.div<{ color: string }>`
-  ${({ color }) => css`
+export const HeaderContent = styled.div`
+  ${({ theme }) => css`
     width: 100%;
-    background-color: ${color || '#ffff'};
+    background-color: ${theme.colors.display[400]};
     padding: 4px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     > div {
       display: flex;
       align-items: center;
@@ -31,7 +32,7 @@ export const HeaderContent = styled.div<{ color: string }>`
 `
 
 export const BodyContent = styled.div`
-  ${({ theme }) => css`
+  ${() => css`
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -42,23 +43,24 @@ export const BodyContent = styled.div`
       height: 30px;
       border-radius: 50%;
       margin-left: 6px;
-      border: 1px solid ${theme.colors.display[500]};
+      box-shadow: 2px 2px 4px -1px rgba(0, 0, 0, 0.09);
     }
   `}
 `
 
-export const FooterContent = styled.div`
+export const FooterContent = styled.div<{ color: string }>`
   ${({ theme, color }) => css`
     display: flex;
+    flex-direction: column;
     border-top: 1px solid ${theme.colors.display[300]};
-    padding: 4px;
+    div {
+      display: flex;
+      padding: 4px;
+    }
 
-    span {
-      margin-left: auto;
-
-      width: 15px;
-      height: 15px;
-      border-radius: 50%;
+    > span {
+      width: 100%;
+      height: 5px;
       background-color: ${color};
     }
   `}

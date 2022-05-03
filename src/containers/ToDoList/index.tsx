@@ -19,6 +19,7 @@ import { UPDATE_COLUMN_TASK } from '@/graphql/mutations/tasks'
 import { useApolloClient } from '@apollo/client'
 import { GET_STAGES } from '@/graphql/queries/stages'
 import { GET_TASKS } from '@/graphql/queries/tasks'
+import Icon from '@/components/Icon'
 
 const ToDoList: React.FC = () => {
   const apolloClient = useApolloClient()
@@ -143,8 +144,16 @@ const ToDoList: React.FC = () => {
                     ref={provided.innerRef}
                     isDraggingOver={snapshot.isDraggingOver}
                   >
-                    <S.Header bgColor={color}>{name}</S.Header>
-                    <div>
+                    <S.Header bgColor={color}>
+                      <div>
+                        <button type="button">
+                          <Icon name="plus-square" />
+                        </button>
+                        <b>{name}</b>{' '}
+                      </div>
+                      <p>{cards?.length || 0}</p>
+                    </S.Header>
+                    <S.ContentCard>
                       {cards?.map((props, index) => (
                         <Draggable
                           key={props.id}
@@ -166,7 +175,7 @@ const ToDoList: React.FC = () => {
                           )}
                         </Draggable>
                       ))}
-                    </div>
+                    </S.ContentCard>
                   </S.ContentToDo>
                 )}
               </Droppable>
