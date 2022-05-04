@@ -14,12 +14,40 @@ import {
 import { useEffect, useState } from 'react'
 import produce from 'immer'
 
-import { TStage, TTask } from '@/pages/ocorrencias'
 import { UPDATE_COLUMN_TASK } from '@/graphql/mutations/tasks'
 import { useApolloClient } from '@apollo/client'
 import { GET_STAGES } from '@/graphql/queries/stages'
 import { GET_TASKS } from '@/graphql/queries/tasks'
 import { toast } from 'react-toastify'
+
+export type TStage = {
+  id: string
+  name: string
+  color: string
+  cards?: TTask[]
+}
+
+export type TTask = {
+  id: string
+  columnId?: string
+  description: string
+  priority: {
+    id: string
+    name: string
+    color: string
+  }
+  stage: {
+    id: string
+  }
+  task_type: {
+    id: string
+    name: string
+  }
+  user: {
+    id: string
+    username: string
+  }
+}
 
 const ToDoList: React.FC = () => {
   const apolloClient = useApolloClient()

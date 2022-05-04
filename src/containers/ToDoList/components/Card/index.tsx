@@ -1,4 +1,4 @@
-import { TTask } from '@/pages/lista-de-tarefas'
+import { TTask } from '../..'
 import * as S from './styles'
 
 const Card = ({
